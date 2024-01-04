@@ -1,2 +1,2 @@
-hashedKey,salt
-jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=,0
+hashedKey,salt,userId
+jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=,0,test

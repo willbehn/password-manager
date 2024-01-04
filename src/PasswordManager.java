@@ -21,45 +21,51 @@ import javax.crypto.spec.IvParameterSpec;
 public class PasswordManager {
     private AESEncryptDecrypt AESutil;
     private SecretKey key;
-    private String passwordsFile;
-    private String keyFile;
-    private String algorithm;
-    private HashMap<String,String[]> allPasswordsEncrypted;
+    private String passwordsFile, userFile, algorithm,selectedUser;
+    private HashMap<String,String[]> allPasswordsEncrypted,allUsers;
 
     PasswordManager() {
         AESutil = new AESEncryptDecrypt();
         algorithm = "AES/CBC/PKCS5Padding";
-        passwordsFile = "config/passwords.txt";
-        keyFile = "config/key.txt";
-        allPasswordsEncrypted = new HashMap<String, String[]>();
+        passwordsFile = "src/passwords.txt";
+        userFile = "src/key.txt";
+        allPasswordsEncrypted = new HashMap<String, String[]>(); 
+        allUsers = new HashMap<String, String[]>(); //username,[userId,hashedKey,salt]
     }
 
     void setMasterPassword(String hashedPassword, String salt) throws IOException, NoSuchAlgorithmException{
-        Writer output = new BufferedWriter(new FileWriter(keyFile, true));
+        Writer output = new BufferedWriter(new FileWriter(userFile, true));
         output.append(AESutil.stringHashing(hashedPassword) + "," + salt);
         output.close();
     }
 
 
-    Boolean checkCorrectPass(String pass) {
+    Boolean checkCorrectPass(String username,String password) {
         try{
-            String checkPassHash = AESutil.stringHashing(pass);
-    
-            Scanner scanner = new Scanner(new File(keyFile));
-            scanner.nextLine(); //Skippe første linje
-    
-            String[] data = scanner.nextLine().strip().split(",");
-            String correctPassHash = data[0];
-            String salt = data[1];
+            if (!allUsers.containsKey(username)){return false;}
+
+            String[] userData = allUsers.get(username); //Exception
+
+            String checkPassHash = AESutil.stringHashing(password);
+
+            String correctPassHash = userData[0];
+            String salt = userData[1];
     
             if (checkPassHash.equals(correctPassHash)){
-                key = AESutil.getKeyFromPassword(pass, salt);
+                key = AESutil.getKeyFromPassword(password, salt);
+                selectedUser = username;
+
                 return true;
             }
             
-        } catch(NoSuchAlgorithmException | FileNotFoundException | InvalidKeySpecException e){
+        } catch(NoSuchAlgorithmException | InvalidKeySpecException e){
             e.printStackTrace();
         } return false;
+    }
+
+   
+    void getDetails(){
+        //TODO
     }
 
 
@@ -86,7 +92,7 @@ public class PasswordManager {
 
         String cipherText = AESutil.encryptPassword(algorithm, newPassword, key, new IvParameterSpec(iv));
 
-        output.append(domain + "," + userInfo + "," + cipherText + "," + Base64.getEncoder().encodeToString(iv) + "\n");
+        output.append(domain + "," + userInfo + "," + cipherText + "," + Base64.getEncoder().encodeToString(iv) + "," + selectedUser + "\n");
         output.close();
     } 
     
@@ -116,7 +122,32 @@ public class PasswordManager {
         }
     }
 
+    void readAllUsersFromFile(){
+        allUsers.clear();
+
+        try{
+            Scanner scanner = new Scanner(new File(userFile));
+            scanner.nextLine();
+
+            while (scanner.hasNextLine()){
+                String[] data = scanner.nextLine().strip().split(",");
+                allUsers.put(data[2], data); 
+            }
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+            return;
+        }
+    }
+
+
+
     HashMap<String, String[]> getAllPasswordsEcrypted(){
         return allPasswordsEncrypted;
     }
+
+    String getSelectedUser(){
+        return selectedUser;
+    }
+
 }

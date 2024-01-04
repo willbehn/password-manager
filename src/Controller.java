@@ -15,12 +15,13 @@ public class Controller {
     Controller(){
         passwordManager = new PasswordManager();
         updatePasswordMap();
+        updateUserMap();
         gui = new Gui(this);
     }
 
 
-    public Boolean logIn(String password){
-        Boolean logInStatus = passwordManager.checkCorrectPass(password);
+    public Boolean logIn(String username,String password){
+        Boolean logInStatus = passwordManager.checkCorrectPass(username,password);
         System.out.println(logInStatus);
 
         return logInStatus;
@@ -60,5 +61,13 @@ public class Controller {
 
     public void updatePasswordMap(){
         passwordManager.readAllPasswordsFromFile();
+    }
+
+    public void updateUserMap(){
+        passwordManager.readAllUsersFromFile();
+    }
+
+    public String getSelectedUser(){
+        return passwordManager.getSelectedUser();
     }
 }

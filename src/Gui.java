@@ -18,6 +18,7 @@ public class Gui {
     JTextField passwordTextField;
     JTextField usernameTextField;
     Controller controller;
+    String selectedUser;
 
     int windowWidth, windowHeight;
 
@@ -112,6 +113,9 @@ public class Gui {
         passwordWindow.setLocation(500,500);
         passwordWindow.setSize(windowWidth,windowHeight);
 
+        selectedUser = controller.getSelectedUser();
+        System.out.println(selectedUser);
+
         timer();
 
         JPanel mainPanel = new JPanel();
@@ -153,8 +157,10 @@ public class Gui {
 
         if (allPasswordsEncrypted.size() >= 1){
             for (String[] passwordData : allPasswordsEncrypted.values()){
+
+                if (!passwordData[4].equals(selectedUser)){continue;}
+
                 System.out.println(Arrays.toString(passwordData));
-    
                 float fontSize = 14;
                 
                 JLabel passwordInfo = new JLabel("<html>" + passwordData[0] + "<br>" + passwordData[1] + "<html>");
@@ -172,10 +178,10 @@ public class Gui {
 
                 JButton editButton = new JButton("Details");
     
-
                 allPasswordsPanel.add(passwordInfo);
                 allPasswordsPanel.add(copyPasswordButton);
                 allPasswordsPanel.add(editButton);
+                
             }
         }
         
@@ -250,8 +256,9 @@ public class Gui {
         @Override 
         public void actionPerformed(ActionEvent e){
             String password = passwordTextField.getText();
+            String username = usernameTextField.getText().stripLeading();
             
-            if(controller.logIn(password)){
+            if(controller.logIn(username,password)){
                 logInWindow.setVisible(false);
                 passwordWindow();
 
