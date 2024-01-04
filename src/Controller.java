@@ -27,6 +27,10 @@ public class Controller {
         return logInStatus;
     }
 
+    void addUser(String username, String password){
+        passwordManager.addUser(username, password);
+    }
+
     public void addPassword(String domain, String userInfo, String password){
         try {
             passwordManager.addPassword(domain, userInfo, password);

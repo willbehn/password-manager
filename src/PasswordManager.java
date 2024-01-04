@@ -33,13 +33,6 @@ public class PasswordManager {
         allUsers = new HashMap<String, String[]>(); //username,[userId,hashedKey,salt]
     }
 
-    void setMasterPassword(String hashedPassword, String salt) throws IOException, NoSuchAlgorithmException{
-        Writer output = new BufferedWriter(new FileWriter(userFile, true));
-        output.append(AESutil.stringHashing(hashedPassword) + "," + salt);
-        output.close();
-    }
-
-
     Boolean checkCorrectPass(String username,String password) {
         try{
             if (!allUsers.containsKey(username)){return false;}
@@ -69,7 +62,7 @@ public class PasswordManager {
     }
 
 
-    void addUser(String userInfo, String password){
+    void addUser(String username, String password){
         byte[] salt = AESutil.generateRandByte();
 
         String saltString = Base64.getEncoder().encodeToString(salt);
@@ -77,7 +70,9 @@ public class PasswordManager {
         try {
             String hashedPassword = AESutil.stringHashing(password);
             
-            setMasterPassword(hashedPassword, saltString);
+            Writer output = new BufferedWriter(new FileWriter(userFile, true));
+            output.append(AESutil.stringHashing(hashedPassword) + "," + salt + "," + username);
+            output.close();
 
         } catch (NoSuchAlgorithmException | IOException e) {
             // TODO Auto-generated catch block
@@ -139,8 +134,6 @@ public class PasswordManager {
             return;
         }
     }
-
-
 
     HashMap<String, String[]> getAllPasswordsEcrypted(){
         return allPasswordsEncrypted;
