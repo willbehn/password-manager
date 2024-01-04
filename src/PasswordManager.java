@@ -71,7 +71,7 @@ public class PasswordManager {
             String hashedPassword = AESutil.stringHashing(password);
             
             Writer output = new BufferedWriter(new FileWriter(userFile, true));
-            output.append(AESutil.stringHashing(hashedPassword) + "," + salt + "," + username);
+            output.append(hashedPassword + "," + saltString + "," + username + "\n");
             output.close();
 
         } catch (NoSuchAlgorithmException | IOException e) {
@@ -128,7 +128,7 @@ public class PasswordManager {
                 String[] data = scanner.nextLine().strip().split(",");
                 allUsers.put(data[2], data); 
             }
-
+            
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             return;
