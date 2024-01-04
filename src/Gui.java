@@ -30,7 +30,7 @@ public class Gui {
     public Gui(Controller controller){
 
         //FlatLaf stuff
-        FlatMacLightLaf.setup();
+        FlatMacDarkLaf.setup();
 
         //Vanlig swing stuff
         // try {
@@ -101,6 +101,54 @@ public class Gui {
         mainPanel.add(newPasswordConfirmField);
 
         mainPanel.add(addPasswordButton);
+
+        newPasswordWindow.add(mainPanel);
+
+        newPasswordWindow.setVisible(true);
+    }
+
+    public void newUserWindow(){
+        newPasswordWindow = new JFrame("New user setup");
+        newPasswordWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newPasswordWindow.setLocation(500,500);
+        newPasswordWindow.setSize(windowWidth,windowHeight);
+
+        JLabel userLabel,userConfirmLabel,passwordLabel, passwordConfirmLabel;
+        JTextField userField,userConfirmField,passwordField, passwordConfirmField;
+
+        
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(0, 2));
+        
+
+        userLabel = new JLabel("Enter username");
+        userField = new JTextField(10);
+
+        userConfirmLabel = new JLabel("Confirm username");
+        userConfirmField = new JTextField(10);
+
+        passwordLabel = new JLabel("Enter password");
+        passwordField = new JPasswordField(10);
+
+        passwordConfirmLabel = new JLabel("Confirm password");
+        passwordConfirmField = new JPasswordField(10);
+
+        JButton addUserButton = new JButton("Add user");
+        //addUserButton.addActionListener();
+
+        mainPanel.add(userLabel);
+        mainPanel.add(userField);
+
+        mainPanel.add(userConfirmLabel);
+        mainPanel.add(userConfirmField);
+
+        mainPanel.add(passwordLabel);
+        mainPanel.add(passwordField);
+
+        mainPanel.add(passwordConfirmLabel);
+        mainPanel.add(passwordConfirmField);
+
+        mainPanel.add(addUserButton);
 
         newPasswordWindow.add(mainPanel);
 
@@ -239,10 +287,11 @@ public class Gui {
 
 
         JLabel newUserInstruction = new JLabel("New user?");
-        JButton registerButton = new JButton("Register");
+        JButton registerUserButton = new JButton("Register");
+        registerUserButton.addActionListener(new RegisterUserButton());
 
         registerPanel.add(newUserInstruction);
-        registerPanel.add(registerButton);
+        registerPanel.add(registerUserButton);
 
         mainPanel.add(logInPanel, BorderLayout.CENTER);
         mainPanel.add(registerPanel, BorderLayout.PAGE_END);
@@ -263,6 +312,14 @@ public class Gui {
                 passwordWindow();
 
             } else {System.out.println("Error");}
+        }
+    }
+
+    class RegisterUserButton implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e){
+            logInWindow.setVisible(false);
+            newUserWindow();
         }
     }
 
