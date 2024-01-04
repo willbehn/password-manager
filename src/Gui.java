@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.Desktop.Action;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
@@ -14,11 +15,13 @@ import com.formdev.flatlaf.themes.*;
 
 
 public class Gui {
-    JFrame logInWindow, passwordWindow, newPasswordWindow;
+    JFrame logInWindow, passwordWindow, newPasswordWindow, newUserWindow;
     JTextField passwordTextField;
     JTextField usernameTextField;
     Controller controller;
     String selectedUser;
+    JLabel failedLogInLabel;
+    float fontSize = 14;
 
     int windowWidth, windowHeight;
 
@@ -108,10 +111,10 @@ public class Gui {
     }
 
     public void newUserWindow(){
-        newPasswordWindow = new JFrame("New user setup");
-        newPasswordWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newPasswordWindow.setLocation(500,500);
-        newPasswordWindow.setSize(windowWidth,windowHeight);
+        newUserWindow = new JFrame("New user setup");
+        newUserWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newUserWindow.setLocation(500,500);
+        newUserWindow.setSize(windowWidth,windowHeight);
 
         JLabel userLabel,userConfirmLabel,passwordLabel, passwordConfirmLabel;
         JTextField userField,userConfirmField,passwordField, passwordConfirmField;
@@ -134,7 +137,7 @@ public class Gui {
         passwordConfirmField = new JPasswordField(10);
 
         JButton addUserButton = new JButton("Add user");
-        //addUserButton.addActionListener();
+        addUserButton.addActionListener(new AddUserButton(userField, passwordField));
 
         mainPanel.add(userLabel);
         mainPanel.add(userField);
@@ -150,9 +153,9 @@ public class Gui {
 
         mainPanel.add(addUserButton);
 
-        newPasswordWindow.add(mainPanel);
+        newUserWindow.add(mainPanel);
 
-        newPasswordWindow.setVisible(true);
+        newUserWindow.setVisible(true);
     }
 
     public void passwordWindow(){
@@ -255,12 +258,15 @@ public class Gui {
         mainPanel.setLayout(new BorderLayout());
 
         JLabel titleLabel = new JLabel("The all in one password manager");
-        float fontSize = 16;
-        titleLabel.setFont(titleLabel.getFont().deriveFont(fontSize));
-        
-        //titleLabel.setBackground(Color.white);
 
-        mainPanel.add(titleLabel, BorderLayout.PAGE_START);
+        failedLogInLabel = new JLabel("Wrong username or password");
+        failedLogInLabel.setForeground(Color.RED);
+        failedLogInLabel.setFont(titleLabel.getFont().deriveFont(fontSize));
+        failedLogInLabel.setVisible(false);
+
+        mainPanel.add(failedLogInLabel, BorderLayout.PAGE_START);
+
+
 
         JPanel logInPanel = new JPanel();
 
@@ -302,6 +308,7 @@ public class Gui {
 
 
     class LogInButton implements ActionListener{
+       
         @Override 
         public void actionPerformed(ActionEvent e){
             String password = passwordTextField.getText();
@@ -309,17 +316,41 @@ public class Gui {
             
             if(controller.logIn(username,password)){
                 logInWindow.setVisible(false);
+                failedLogInLabel.setVisible(false);
                 passwordWindow();
 
-            } else {System.out.println("Error");}
+            } else {
+                failedLogInLabel.setVisible(true);
+            }
         }
     }
 
     class RegisterUserButton implements ActionListener{
+        
         @Override
         public void actionPerformed(ActionEvent e){
             logInWindow.setVisible(false);
             newUserWindow();
+        }
+    }
+
+    class AddUserButton implements ActionListener{
+        JTextField usernameField, passwordField;
+
+        AddUserButton(JTextField usernameField, JTextField passwordField){
+            this.usernameField = usernameField;
+            this.passwordField = passwordField;
+        }
+
+        @Override 
+        public void actionPerformed(ActionEvent e){
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+
+            controller.addUser(username, password);
+            newUserWindow.dispose();
+
+            logInWindow.setVisible(true);
         }
     }
 
