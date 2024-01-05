@@ -22,22 +22,25 @@ public class PasswordManager {
     private AESEncryptDecrypt AESutil;
     private SecretKey key;
     private String passwordsFile, userFile, algorithm,selectedUser;
-    private HashMap<String,String[]> allPasswordsEncrypted,allUsers;
+    private HashMap<String,String[]> allPasswordsMap,allUsersMap;
 
     PasswordManager() {
         AESutil = new AESEncryptDecrypt();
         algorithm = "AES/CBC/PKCS5Padding";
         passwordsFile = "src/passwords.txt";
         userFile = "src/key.txt";
-        allPasswordsEncrypted = new HashMap<String, String[]>(); 
-        allUsers = new HashMap<String, String[]>(); //username,[userId,hashedKey,salt]
+        allPasswordsMap = new HashMap<String, String[]>(); //password domain, [domain,userinfo,password(encrypted),iv,mainuser]
+        allUsersMap = new HashMap<String, String[]>(); //username,[userId,hashedKey,salt]
     }
 
+
+    //Tar inn et brukernavn og passord, sjekker om brukeren finnes allerede, hvis bruker finnes sammenlinges passordet som er gitt(hashet), 
+    //med det hashede passordet som ligger i userFile
     Boolean checkCorrectPass(String username,String password) {
         try{
-            if (!allUsers.containsKey(username)){return false;}
+            if (!allUsersMap.containsKey(username)){return false;}
 
-            String[] userData = allUsers.get(username); //Exception
+            String[] userData = allUsersMap.get(username); 
 
             String checkPassHash = AESutil.stringHashing(password);
 
@@ -56,7 +59,7 @@ public class PasswordManager {
         } return false;
     }
 
-   
+
     void getDetails(){
         //TODO
     }
@@ -75,7 +78,6 @@ public class PasswordManager {
             output.close();
 
         } catch (NoSuchAlgorithmException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -100,7 +102,7 @@ public class PasswordManager {
     }
 
     void readAllPasswordsFromFile(){
-        allPasswordsEncrypted.clear(); //Resetter hashMappet slik at det ikke blir dobbelt opp
+        allPasswordsMap.clear(); //Resetter hashMappet slik at det ikke blir dobbelt opp
 
         try{
             Scanner scanner = new Scanner(new File(passwordsFile));
@@ -108,7 +110,7 @@ public class PasswordManager {
 
             while (scanner.hasNextLine()){
                 String[] data = scanner.nextLine().strip().split(",");
-                allPasswordsEncrypted.put(data[0], data); 
+                allPasswordsMap.put(data[0], data); 
             }
 
         } catch (FileNotFoundException e) {
@@ -117,8 +119,8 @@ public class PasswordManager {
         }
     }
 
-    void readAllUsersFromFile(){
-        allUsers.clear();
+    void readallUsersMapFromFile(){
+        allUsersMap.clear();
 
         try{
             Scanner scanner = new Scanner(new File(userFile));
@@ -126,7 +128,7 @@ public class PasswordManager {
 
             while (scanner.hasNextLine()){
                 String[] data = scanner.nextLine().strip().split(",");
-                allUsers.put(data[2], data); 
+                allUsersMap.put(data[2], data); 
             }
             
         } catch (FileNotFoundException e) {
@@ -136,7 +138,7 @@ public class PasswordManager {
     }
 
     HashMap<String, String[]> getAllPasswordsEcrypted(){
-        return allPasswordsEncrypted;
+        return allPasswordsMap;
     }
 
     String getSelectedUser(){
