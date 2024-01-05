@@ -15,7 +15,7 @@ import com.formdev.flatlaf.themes.*;
 
 
 public class Gui {
-    JFrame logInWindow, passwordWindow, newPasswordWindow, newUserWindow;
+    JFrame logInWindow, passwordWindow, newPasswordWindow, newUserWindow, detailsWindow;
     JTextField passwordTextField;
     JTextField usernameTextField;
     Controller controller;
@@ -42,8 +42,8 @@ public class Gui {
         //     System.exit(1);
         // }
 
-        windowWidth = 450;
-        windowHeight = 300;
+        windowWidth = 400;
+        windowHeight = 250;
         
         
         this.controller = controller;
@@ -67,7 +67,7 @@ public class Gui {
     public void newPasswordWindow(){
         newPasswordWindow = new JFrame("New password setup");
         newPasswordWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newPasswordWindow.setLocation(500,500);
+        newPasswordWindow.setLocationRelativeTo(null);
         newPasswordWindow.setSize(windowWidth,windowHeight);
 
         
@@ -113,7 +113,7 @@ public class Gui {
     public void newUserWindow(){
         newUserWindow = new JFrame("New user setup");
         newUserWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newUserWindow.setLocation(500,500);
+        newUserWindow.setLocationRelativeTo(null);
         newUserWindow.setSize(windowWidth,windowHeight);
 
         JLabel userLabel,userConfirmLabel,passwordLabel, passwordConfirmLabel;
@@ -161,7 +161,7 @@ public class Gui {
     public void passwordWindow(){
         passwordWindow = new JFrame("Password manager");
         passwordWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        passwordWindow.setLocation(500,500);
+        passwordWindow.setLocationRelativeTo(null);
         passwordWindow.setSize(windowWidth,windowHeight);
 
         selectedUser = controller.getSelectedUser();
@@ -170,19 +170,13 @@ public class Gui {
         timer();
 
         JPanel mainPanel = new JPanel();
-
-        //mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setLayout(new BorderLayout());
 
         //===Top panel stuff===
-        JPanel topPanel = new JPanel();
-        //topPanel.setLayout(new GridLayout(1,4));
+        JToolBar topToolBar = new JToolBar();
 
 
         JButton searchButton = new JButton("Search");
-
-        // JButton resetButton = new JButton("Reset");
-        // resetButton.setBackground(Color.red);
 
 
         JTextField searchField = new JTextField(15);
@@ -191,12 +185,11 @@ public class Gui {
         newPasswordButton.addActionListener(new NewPasswordButton());
 
         
-        topPanel.add(searchField);
-        topPanel.add(searchButton);
-        topPanel.add(newPasswordButton);
-        // topPanel.add(resetButton);
+        topToolBar.add(searchField);
+        topToolBar.add(searchButton);
+        topToolBar.add(newPasswordButton);
 
-        mainPanel.add(topPanel, BorderLayout.PAGE_START);
+        mainPanel.add(topToolBar, BorderLayout.PAGE_START);
 
         JPanel allPasswordsPanel = new JPanel();
         allPasswordsPanel.setLayout(new GridLayout(0, 3));
@@ -211,7 +204,6 @@ public class Gui {
 
                 if (!passwordData[4].equals(selectedUser)){continue;}
 
-                System.out.println(Arrays.toString(passwordData));
                 float fontSize = 14;
                 
                 JLabel passwordInfo = new JLabel("<html>" + passwordData[0] + "<br>" + passwordData[1] + "<html>");
@@ -224,15 +216,15 @@ public class Gui {
 
 
                 JButton copyPasswordButton = new JButton("Copy password");
-                //copyPasswordButton.setSize(new Dimension(5,5));
                 copyPasswordButton.addActionListener(new copyToClipBoardButton(passwordData));
 
-                JButton editButton = new JButton("Details");
-    
+                JButton detailsButton = new JButton("Details");
+                detailsButton.addActionListener(new DetailsButton(passwordData));
+
+
                 allPasswordsPanel.add(passwordInfo);
                 allPasswordsPanel.add(copyPasswordButton);
-                allPasswordsPanel.add(editButton);
-                
+                allPasswordsPanel.add(detailsButton);      
             }
         }
         
@@ -240,8 +232,6 @@ public class Gui {
         JScrollPane scrollPane = new JScrollPane(allPasswordsPanel);
 
         mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-
         passwordWindow.add(mainPanel);
         passwordWindow.setVisible(true);
     }
@@ -250,7 +240,7 @@ public class Gui {
     public void startWindow(){
         logInWindow = new JFrame("Password manager");
         logInWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        logInWindow.setLocation(500,500);
+        logInWindow.setLocationRelativeTo(null);
         logInWindow.setSize(250,180);
 
 
@@ -269,7 +259,6 @@ public class Gui {
 
 
         JPanel logInPanel = new JPanel();
-
 
 
         JButton logInButton = new JButton("login");
@@ -307,8 +296,49 @@ public class Gui {
     }
 
 
+    void detailsWindow(String[] passwordData){
+
+        detailsWindow = new JFrame();
+        detailsWindow.setLocation(passwordWindow.getX() + 20, passwordWindow.getY() + 20);
+        detailsWindow.setSize(220,180);
+
+        JPanel mainPanel = new JPanel();
+        
+
+        JLabel domainLabel = new JLabel("Domain: " + passwordData[0]);
+        JLabel usernameLabel = new JLabel("Username: " + passwordData[1]);
+        JLabel passwordLabel = new JLabel("Password: " + controller.decryptPassword(passwordData));
+
+        JButton editButton = new JButton("Edit");
+        JButton removeButton = new JButton("Remove");
+
+
+        mainPanel.add(domainLabel);
+        mainPanel.add(usernameLabel);
+        mainPanel.add(passwordLabel);
+
+        mainPanel.add(editButton);
+        mainPanel.add(removeButton);        
+
+        detailsWindow.add(mainPanel);
+        detailsWindow.setVisible(true);
+    }
+
+    class DetailsButton implements ActionListener{
+        String[] passwordData;
+
+        DetailsButton(String[] passwordData){
+            this.passwordData = passwordData;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e){
+            detailsWindow(passwordData);
+        }
+    }
+
+
     class LogInButton implements ActionListener{
-       
         @Override 
         public void actionPerformed(ActionEvent e){
             String password = passwordTextField.getText();
@@ -326,7 +356,6 @@ public class Gui {
     }
 
     class RegisterUserButton implements ActionListener{
-        
         @Override
         public void actionPerformed(ActionEvent e){
             logInWindow.setVisible(false);
@@ -366,17 +395,16 @@ public class Gui {
             passwordConfirm = newPasswordConfirmField.getText();
 
 
-            // if (!password.equals(passwordConfirm)){ //TODO
-            //     return;
-            // }
+            if (!password.equals(passwordConfirm)){
+                newPasswordConfirmField.setBackground(Color.RED);
+                return;
+            }
 
             controller.addPassword(newDomain, userInfo, password);
             controller.updatePasswordMap();
             newPasswordWindow.dispose();
 
             passwordWindow();
-            
-
         }
     }
 
