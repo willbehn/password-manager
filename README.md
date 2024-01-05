@@ -1,7 +1,7 @@
 # password-manager
 
 ## About: 
-
+This is a Java-based password manager designed to help you securely store and manage your passwords. It uses encryption to keep your information safe and offers features like multiple user support and password search functionality for ease of use.
 
 ## Features:
 
