@@ -1,16 +1,12 @@
 import java.awt.*;
-import java.awt.Desktop.Action;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.*;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.themes.*;
 
 
@@ -37,8 +33,8 @@ public class Gui {
         //     System.exit(1);
         // }
 
-        windowWidth = 400;
-        windowHeight = 250;
+        windowWidth = 380;
+        windowHeight = 200;
 
         this.controller = controller;
         startWindow();
@@ -190,8 +186,7 @@ public class Gui {
     public JPanel createPasswordPanel(String searchTerm){
         JPanel allPasswordsPanel = new JPanel();
 
-        allPasswordsPanel.setLayout(new GridLayout(0, 3));
-        allPasswordsPanel.setSize(20,20);
+        allPasswordsPanel.setLayout(new BoxLayout(allPasswordsPanel, BoxLayout.PAGE_AXIS));
 
 
         HashMap<String, String[]> allPasswordsEncrypted = controller.getAllEncryptedPasswords();
@@ -203,10 +198,9 @@ public class Gui {
 
                 if (!passwordData[4].equals(selectedUser)){continue;}
 
-                float fontSize = 14;
+                JPanel passwordPanel = new JPanel();
 
                 JLabel passwordInfo = new JLabel("<html><font size='3' color=white>" + passwordData[0] + "</font> <br> <font size='4'color=green>" + passwordData[1] + "</font></html>");
-
                
                 JButton copyPasswordButton = new JButton("Copy password");
                 copyPasswordButton.addActionListener(new copyToClipBoardButton(passwordData));
@@ -214,14 +208,15 @@ public class Gui {
                 JButton detailsButton = new JButton("Details");
                 detailsButton.addActionListener(new DetailsButton(passwordData));
 
+                passwordPanel.add(passwordInfo);
+                passwordPanel.add(copyPasswordButton);
+                passwordPanel.add(detailsButton); 
 
                 if (!searchTerm.equals("") && !passwordData[0].contains(searchTerm)){
                     continue;
 
                 } else { 
-                    allPasswordsPanel.add(passwordInfo);
-                    allPasswordsPanel.add(copyPasswordButton);
-                    allPasswordsPanel.add(detailsButton);   
+                    allPasswordsPanel.add(passwordPanel);
                 }
             }
         }
@@ -249,7 +244,6 @@ public class Gui {
     public void startWindow(){
         logInWindow = createFrame(250,180);
 
-
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
@@ -257,7 +251,6 @@ public class Gui {
 
         failedLogInLabel = new JLabel("Wrong username or password", SwingConstants.CENTER);
         failedLogInLabel.setForeground(Color.RED);
-        //failedLogInLabel.setFont(titleLabel.getFont().deriveFont(fontSize));
         failedLogInLabel.setVisible(false);
 
         mainPanel.add(failedLogInLabel, BorderLayout.PAGE_START);
@@ -282,8 +275,6 @@ public class Gui {
         logInPanel.add(logInButton);
 
         JPanel registerPanel = new JPanel();
-
-
         JLabel newUserInstruction = new JLabel("New user?");
         JButton registerUserButton = new JButton("Register");
         registerUserButton.addActionListener(new RegisterUserButton());
@@ -306,7 +297,6 @@ public class Gui {
 
         JPanel mainPanel = new JPanel();
         
-
         JLabel domainLabel = new JLabel("Domain: " + passwordData[0]);
         JLabel usernameLabel = new JLabel("Username: " + passwordData[1]);
         JLabel passwordLabel = new JLabel("Password: " + controller.decryptPassword(passwordData));
@@ -318,7 +308,6 @@ public class Gui {
         mainPanel.add(domainLabel);
         mainPanel.add(usernameLabel);
         mainPanel.add(passwordLabel);
-
         mainPanel.add(editButton);
         mainPanel.add(removeButton);        
 
