@@ -32,6 +32,8 @@ Option to add new passwords. The password will not be added if all the fields ar
 Example of how the data is stored in the .txt file, the password is stored encrypted. <br />
 ![Screenshot 2024-01-08 at 21 55 32](https://github.com/willbehn/password-manager/assets/71493303/10ab0dd0-5f4d-4e5c-9611-0a59b2823faf) <br />
 
+Example of what happens when you press the details button. You get the option to change and delete your password <br />
+![Screenshot 2024-01-08 at 23 50 39](https://github.com/willbehn/password-manager/assets/71493303/f430386b-4290-4fbc-8e02-04ed7d51d21f) <br />
 
 ## How to use:
 
