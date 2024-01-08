@@ -16,6 +16,7 @@ import com.formdev.flatlaf.themes.*;
 
 public class Gui {
     JFrame logInWindow, passwordWindow, newPasswordWindow, newUserWindow, detailsWindow;
+    JPanel passwordMainPanel;
     JTextField passwordTextField;
     JTextField usernameTextField;
     Controller controller;
@@ -45,7 +46,6 @@ public class Gui {
         windowWidth = 400;
         windowHeight = 250;
         
-        
         this.controller = controller;
         startWindow();
     }
@@ -74,8 +74,6 @@ public class Gui {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(0, 2));
         
-        //mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
         newDomainLabel = new JLabel("Enter password domain");
         newDomainField = new JTextField(10);
 
@@ -169,29 +167,45 @@ public class Gui {
 
         timer();
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BorderLayout());
+        passwordMainPanel = new JPanel();
+        passwordMainPanel.setLayout(new BorderLayout());
 
-        //===Top panel stuff===
+        JToolBar topToolBar = createToolBar();
+
+        passwordMainPanel.add(topToolBar, BorderLayout.PAGE_START);
+
+        JPanel allPasswordsPanel = createPasswordPanel("");
+        
+        JScrollPane scrollPane = new JScrollPane(allPasswordsPanel);
+
+        passwordMainPanel.add(scrollPane, BorderLayout.CENTER);
+        passwordWindow.add(passwordMainPanel);
+        passwordWindow.setVisible(true);
+    }
+
+    public JToolBar createToolBar(){
         JToolBar topToolBar = new JToolBar();
-
-
-        JButton searchButton = new JButton("Search");
 
 
         JTextField searchField = new JTextField(15);
 
+        JButton searchButton = new JButton("Search");
+        searchButton.addActionListener(new SearchButton(searchField));
+        
         JButton newPasswordButton = new JButton("Add new password");
         newPasswordButton.addActionListener(new NewPasswordButton());
 
-        
         topToolBar.add(searchField);
         topToolBar.add(searchButton);
         topToolBar.add(newPasswordButton);
 
-        mainPanel.add(topToolBar, BorderLayout.PAGE_START);
+        return topToolBar;
+    }
 
+
+    public JPanel createPasswordPanel(String term){
         JPanel allPasswordsPanel = new JPanel();
+
         allPasswordsPanel.setLayout(new GridLayout(0, 3));
 
 
@@ -222,18 +236,39 @@ public class Gui {
                 detailsButton.addActionListener(new DetailsButton(passwordData));
 
 
-                allPasswordsPanel.add(passwordInfo);
-                allPasswordsPanel.add(copyPasswordButton);
-                allPasswordsPanel.add(detailsButton);      
+                if (term.equals("")){
+                    allPasswordsPanel.add(passwordInfo);
+                    allPasswordsPanel.add(copyPasswordButton);
+                    allPasswordsPanel.add(detailsButton);
+
+                } else if (passwordData[0].contains(term)){ //TODO fiks dårlig kode her
+                    allPasswordsPanel.add(passwordInfo);
+                    allPasswordsPanel.add(copyPasswordButton);
+                    allPasswordsPanel.add(detailsButton);   
+                }
+
             }
         }
+
+        return allPasswordsPanel;
+
+    }
+
+    public void search(String searchTerm){
+        JPanel searchResult = createPasswordPanel(searchTerm);
+
+        passwordMainPanel.removeAll();
         
+        JScrollPane scrollPane = new JScrollPane(searchResult);
+        JToolBar topToolBar = createToolBar();
 
-        JScrollPane scrollPane = new JScrollPane(allPasswordsPanel);
+        passwordMainPanel.add(topToolBar, BorderLayout.PAGE_START);
 
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        passwordWindow.add(mainPanel);
-        passwordWindow.setVisible(true);
+        passwordMainPanel.add(scrollPane, BorderLayout.CENTER);
+        passwordWindow.add(passwordMainPanel);
+
+        passwordWindow.revalidate();
+        passwordWindow.repaint();
     }
 
 
@@ -241,7 +276,7 @@ public class Gui {
         logInWindow = new JFrame("Password manager");
         logInWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         logInWindow.setLocationRelativeTo(null);
-        logInWindow.setSize(250,180);
+        logInWindow.setSize(250,160);
 
 
         JPanel mainPanel = new JPanel();
@@ -322,6 +357,23 @@ public class Gui {
 
         detailsWindow.add(mainPanel);
         detailsWindow.setVisible(true);
+    }
+
+
+    class SearchButton implements ActionListener{
+        JTextField searchField;
+
+        SearchButton(JTextField searField){
+            this.searchField = searField;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String searchTerm = searchField.getText();
+
+            search(searchTerm);
+            
+        }
     }
 
     class DetailsButton implements ActionListener{
