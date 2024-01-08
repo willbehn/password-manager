@@ -25,10 +25,6 @@ public class Gui {
     float fontSize = 14;
     int windowWidth, windowHeight;
 
-    //For nytt passord vindu;
-    JLabel newDomainLabel, userInfoLabel, newPasswordLabel;
-    JTextField newDomainField, userInfoField, newPasswordField;
-
     public Gui(Controller controller){
 
         //FlatLaf stuff
@@ -72,24 +68,24 @@ public class Gui {
     
 
     public void newPasswordWindow(){
-        newPasswordWindow = createFrame(250,160);
+        newPasswordWindow = createFrame(250,180);
         
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         
-        newDomainLabel = new JLabel("Service", SwingConstants.CENTER);
-        newDomainField = new JTextField(10);
+        JLabel newDomainLabel = new JLabel("Service", SwingConstants.CENTER);
+        JTextField newDomainField = new JTextField(10);
 
-        userInfoLabel = new JLabel("User-info", SwingConstants.CENTER);
-        userInfoField = new JTextField(10);
+        JLabel userInfoLabel = new JLabel("User-info", SwingConstants.CENTER);
+        JTextField userInfoField = new JTextField(10);
 
-        newPasswordLabel = new JLabel("Password", SwingConstants.CENTER);
-        newPasswordField = new JPasswordField(10);
+        JLabel newPasswordLabel = new JLabel("Password", SwingConstants.CENTER);
+        JTextField newPasswordField = new JPasswordField(10);
 
     
 
         JButton addPasswordButton = new JButton("Add password");
-        addPasswordButton.addActionListener(new AddPasswordButton());
+        addPasswordButton.addActionListener(new AddPasswordButton(newDomainField, userInfoField, newPasswordField));
 
         JPanel underPanel = new JPanel();
         underPanel.setLayout(new GridLayout(3,3));
@@ -110,7 +106,7 @@ public class Gui {
     }
 
     public void newUserWindow(){
-        newUserWindow = createFrame(250, 160);
+        newUserWindow = createFrame(250, 180);
 
         JLabel userLabel,passwordLabel,topLabel;
         JTextField userField,passwordField;
@@ -208,16 +204,10 @@ public class Gui {
                 if (!passwordData[4].equals(selectedUser)){continue;}
 
                 float fontSize = 14;
-                
-                JLabel passwordInfo = new JLabel("<html>" + passwordData[0] + "<br>" + passwordData[1] + "<html>");
-                passwordInfo.setFont(passwordInfo.getFont().deriveFont(fontSize));
 
-                if (!colored){
-                    passwordInfo.setForeground(Color.GRAY);
-                    colored = true;
-                } else {colored = false;}
+                JLabel passwordInfo = new JLabel("<html><font size='3' color=white>" + passwordData[0] + "</font> <br> <font size='4'color=green>" + passwordData[1] + "</font></html>");
 
-
+               
                 JButton copyPasswordButton = new JButton("Copy password");
                 copyPasswordButton.addActionListener(new copyToClipBoardButton(passwordData));
 
@@ -257,7 +247,7 @@ public class Gui {
 
 
     public void startWindow(){
-        logInWindow = createFrame(250,160);
+        logInWindow = createFrame(250,180);
 
 
         JPanel mainPanel = new JPanel();
@@ -265,9 +255,9 @@ public class Gui {
 
         JLabel titleLabel = new JLabel("The all in one password manager");
 
-        failedLogInLabel = new JLabel("Wrong username or password");
+        failedLogInLabel = new JLabel("Wrong username or password", SwingConstants.CENTER);
         failedLogInLabel.setForeground(Color.RED);
-        failedLogInLabel.setFont(titleLabel.getFont().deriveFont(fontSize));
+        //failedLogInLabel.setFont(titleLabel.getFont().deriveFont(fontSize));
         failedLogInLabel.setVisible(false);
 
         mainPanel.add(failedLogInLabel, BorderLayout.PAGE_START);
@@ -312,7 +302,7 @@ public class Gui {
     void detailsWindow(String[] passwordData){
         detailsWindow = new JFrame();
         detailsWindow.setLocation(passwordWindow.getX() + 20, passwordWindow.getY() + 20);
-        detailsWindow.setSize(220,180);
+        detailsWindow.setSize(250,180);
 
         JPanel mainPanel = new JPanel();
         
@@ -416,14 +406,20 @@ public class Gui {
     }
 
     class AddPasswordButton implements ActionListener{
-        String newDomain, userInfo, password, passwordConfirm;
+        JTextField newDomainField, userInfoField, passwordField;
+
+        AddPasswordButton(JTextField newDomain, JTextField userInfo, JTextField password){
+            this.newDomainField = newDomain;
+            this.userInfoField = userInfo;
+            this.passwordField = password;
+        }
 
         @Override
         public void actionPerformed(ActionEvent e){
             
-            newDomain = newDomainField.getText();
-            userInfo = userInfoField.getText();
-            password = newPasswordField.getText();
+            String newDomain = newDomainField.getText();
+            String userInfo = userInfoField.getText();
+            String password = passwordField.getText();
 
             if (newDomain.equals("") || userInfo.equals("") || password.equals("")){
                 return; //TODO vis gi beskjed til bruker at alle feltene må være fylt inn
