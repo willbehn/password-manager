@@ -1,3 +1,7 @@
+/*This SQL script is for creating a simple database for storing your passwords. 
+The password manager currently requires two .txt files to function, but will be 
+moved over to use a SQL database for storage when finished. This is currently for testing*/
+
 CREATE SCHEMA passwordManager;
 
 CREATE TABLE passwordManager.Users (
