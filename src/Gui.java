@@ -23,13 +23,11 @@ public class Gui {
     String selectedUser;
     JLabel failedLogInLabel;
     float fontSize = 14;
-
     int windowWidth, windowHeight;
 
-
     //For nytt passord vindu;
-    JLabel newDomainLabel, userInfoLabel, newPasswordLabel, newPasswordConfirmLabel;
-    JTextField newDomainField, userInfoField, newPasswordField, newPasswordConfirmField;
+    JLabel newDomainLabel, userInfoLabel, newPasswordLabel;
+    JTextField newDomainField, userInfoField, newPasswordField;
 
     public Gui(Controller controller){
 
@@ -45,7 +43,7 @@ public class Gui {
 
         windowWidth = 400;
         windowHeight = 250;
-        
+
         this.controller = controller;
         startWindow();
     }
@@ -57,51 +55,54 @@ public class Gui {
                 passwordTextField.setText("");
                 logInWindow.setVisible(true);
             }
-            
         });
         timer.setRepeats(false);
         timer.start();
     }
+
+    JFrame createFrame(int widt, int height){
+        JFrame newFrame = new JFrame("Password manager");
+
+        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newFrame.setLocationRelativeTo(null);
+        newFrame.setSize(widt,height);
+
+        return newFrame;
+    }
     
 
     public void newPasswordWindow(){
-        newPasswordWindow = new JFrame("New password setup");
-        newPasswordWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newPasswordWindow.setLocationRelativeTo(null);
-        newPasswordWindow.setSize(windowWidth,windowHeight);
-
+        newPasswordWindow = createFrame(250,160);
         
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(0, 2));
+        mainPanel.setLayout(new BorderLayout());
         
-        newDomainLabel = new JLabel("Enter password domain");
+        newDomainLabel = new JLabel("Service", SwingConstants.CENTER);
         newDomainField = new JTextField(10);
 
-        userInfoLabel = new JLabel("Enter user info");
+        userInfoLabel = new JLabel("User-info", SwingConstants.CENTER);
         userInfoField = new JTextField(10);
 
-        newPasswordLabel = new JLabel("Enter new password");
+        newPasswordLabel = new JLabel("Password", SwingConstants.CENTER);
         newPasswordField = new JPasswordField(10);
 
-        newPasswordConfirmLabel = new JLabel("Confirm new password");
-        newPasswordConfirmField = new JPasswordField(10);
+    
 
         JButton addPasswordButton = new JButton("Add password");
         addPasswordButton.addActionListener(new AddPasswordButton());
 
-        mainPanel.add(newDomainLabel);
-        mainPanel.add(newDomainField);
+        JPanel underPanel = new JPanel();
+        underPanel.setLayout(new GridLayout(3,3));
 
-        mainPanel.add(userInfoLabel);
-        mainPanel.add(userInfoField);
+        underPanel.add(newDomainLabel);
+        underPanel.add(newDomainField);
+        underPanel.add(userInfoLabel);
+        underPanel.add(userInfoField);
+        underPanel.add(newPasswordLabel);
+        underPanel.add(newPasswordField);
 
-        mainPanel.add(newPasswordLabel);
-        mainPanel.add(newPasswordField);
-
-        mainPanel.add(newPasswordConfirmLabel);
-        mainPanel.add(newPasswordConfirmField);
-
-        mainPanel.add(addPasswordButton);
+        mainPanel.add(addPasswordButton, BorderLayout.PAGE_END);
+        mainPanel.add(underPanel, BorderLayout.CENTER);
 
         newPasswordWindow.add(mainPanel);
 
@@ -109,68 +110,56 @@ public class Gui {
     }
 
     public void newUserWindow(){
-        newUserWindow = new JFrame("New user setup");
-        newUserWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newUserWindow.setLocationRelativeTo(null);
-        newUserWindow.setSize(windowWidth,windowHeight);
+        newUserWindow = createFrame(250, 160);
 
-        JLabel userLabel,userConfirmLabel,passwordLabel, passwordConfirmLabel;
-        JTextField userField,userConfirmField,passwordField, passwordConfirmField;
+        JLabel userLabel,passwordLabel,topLabel;
+        JTextField userField,passwordField;
 
         
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(0, 2));
+        mainPanel.setLayout(new BorderLayout());
         
+        topLabel = new JLabel("Add new user:", SwingConstants.CENTER);
+        topLabel.setFont(topLabel.getFont().deriveFont(fontSize));
 
-        userLabel = new JLabel("Enter username");
+        userLabel = new JLabel("Username", SwingConstants.CENTER);
         userField = new JTextField(10);
 
-        userConfirmLabel = new JLabel("Confirm username");
-        userConfirmField = new JTextField(10);
 
-        passwordLabel = new JLabel("Enter password");
+        passwordLabel = new JLabel("Password", SwingConstants.CENTER);
         passwordField = new JPasswordField(10);
 
-        passwordConfirmLabel = new JLabel("Confirm password");
-        passwordConfirmField = new JPasswordField(10);
 
-        JButton addUserButton = new JButton("Add user");
+        JButton addUserButton = new JButton("Add");
         addUserButton.addActionListener(new AddUserButton(userField, passwordField));
 
-        mainPanel.add(userLabel);
-        mainPanel.add(userField);
+        mainPanel.add(topLabel, BorderLayout.PAGE_START);
 
-        mainPanel.add(userConfirmLabel);
-        mainPanel.add(userConfirmField);
+        JPanel underPanel = new JPanel();
 
-        mainPanel.add(passwordLabel);
-        mainPanel.add(passwordField);
+        underPanel.add(userLabel);
+        underPanel.add(userField);
+        underPanel.add(passwordLabel);
+        underPanel.add(passwordField);
+        underPanel.add(addUserButton);
 
-        mainPanel.add(passwordConfirmLabel);
-        mainPanel.add(passwordConfirmField);
-
-        mainPanel.add(addUserButton);
-
+        mainPanel.add(underPanel, BorderLayout.CENTER);
         newUserWindow.add(mainPanel);
-
         newUserWindow.setVisible(true);
     }
 
     public void passwordWindow(){
-        passwordWindow = new JFrame("Password manager");
-        passwordWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        passwordWindow.setLocationRelativeTo(null);
-        passwordWindow.setSize(windowWidth,windowHeight);
+        passwordWindow = createFrame(windowWidth, windowHeight);
 
         selectedUser = controller.getSelectedUser();
         System.out.println(selectedUser);
 
-        timer();
+        timer(); //Starter timer som logger ut brukeren som er er logget inn når det har gått 90 sekunder
 
         passwordMainPanel = new JPanel();
         passwordMainPanel.setLayout(new BorderLayout());
 
-        JToolBar topToolBar = createToolBar();
+        JToolBar topToolBar = createTopToolBar();
 
         passwordMainPanel.add(topToolBar, BorderLayout.PAGE_START);
 
@@ -183,9 +172,8 @@ public class Gui {
         passwordWindow.setVisible(true);
     }
 
-    public JToolBar createToolBar(){
+    public JToolBar createTopToolBar(){
         JToolBar topToolBar = new JToolBar();
-
 
         JTextField searchField = new JTextField(15);
 
@@ -202,11 +190,12 @@ public class Gui {
         return topToolBar;
     }
 
-
-    public JPanel createPasswordPanel(String term){
+    //Lager og returnerer et JPanel med alle passord. Hvilke passord man har med kan spesifiseres med et searchTerm
+    public JPanel createPasswordPanel(String searchTerm){
         JPanel allPasswordsPanel = new JPanel();
 
         allPasswordsPanel.setLayout(new GridLayout(0, 3));
+        allPasswordsPanel.setSize(20,20);
 
 
         HashMap<String, String[]> allPasswordsEncrypted = controller.getAllEncryptedPasswords();
@@ -236,22 +225,17 @@ public class Gui {
                 detailsButton.addActionListener(new DetailsButton(passwordData));
 
 
-                if (term.equals("")){
-                    allPasswordsPanel.add(passwordInfo);
-                    allPasswordsPanel.add(copyPasswordButton);
-                    allPasswordsPanel.add(detailsButton);
+                if (!searchTerm.equals("") && !passwordData[0].contains(searchTerm)){
+                    continue;
 
-                } else if (passwordData[0].contains(term)){ //TODO fiks dårlig kode her
+                } else { 
                     allPasswordsPanel.add(passwordInfo);
                     allPasswordsPanel.add(copyPasswordButton);
                     allPasswordsPanel.add(detailsButton);   
                 }
-
             }
         }
-
         return allPasswordsPanel;
-
     }
 
     public void search(String searchTerm){
@@ -260,7 +244,7 @@ public class Gui {
         passwordMainPanel.removeAll();
         
         JScrollPane scrollPane = new JScrollPane(searchResult);
-        JToolBar topToolBar = createToolBar();
+        JToolBar topToolBar = createTopToolBar();
 
         passwordMainPanel.add(topToolBar, BorderLayout.PAGE_START);
 
@@ -273,10 +257,7 @@ public class Gui {
 
 
     public void startWindow(){
-        logInWindow = new JFrame("Password manager");
-        logInWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        logInWindow.setLocationRelativeTo(null);
-        logInWindow.setSize(250,160);
+        logInWindow = createFrame(250,160);
 
 
         JPanel mainPanel = new JPanel();
@@ -291,10 +272,7 @@ public class Gui {
 
         mainPanel.add(failedLogInLabel, BorderLayout.PAGE_START);
 
-
-
         JPanel logInPanel = new JPanel();
-
 
         JButton logInButton = new JButton("login");
         logInButton.setBackground(Color.green.darker());
@@ -332,7 +310,6 @@ public class Gui {
 
 
     void detailsWindow(String[] passwordData){
-
         detailsWindow = new JFrame();
         detailsWindow.setLocation(passwordWindow.getX() + 20, passwordWindow.getY() + 20);
         detailsWindow.setSize(220,180);
@@ -372,7 +349,6 @@ public class Gui {
             String searchTerm = searchField.getText();
 
             search(searchTerm);
-            
         }
     }
 
@@ -428,6 +404,10 @@ public class Gui {
             String username = usernameField.getText();
             String password = passwordField.getText();
 
+            if(username.equals("") || password.equals("")){
+                return; //TODO vis gi beskjed til bruker at alle feltene må være fylt inn
+            }
+
             controller.addUser(username, password);
             newUserWindow.dispose();
 
@@ -444,12 +424,9 @@ public class Gui {
             newDomain = newDomainField.getText();
             userInfo = userInfoField.getText();
             password = newPasswordField.getText();
-            passwordConfirm = newPasswordConfirmField.getText();
 
-
-            if (!password.equals(passwordConfirm)){
-                newPasswordConfirmField.setBackground(Color.RED);
-                return;
+            if (newDomain.equals("") || userInfo.equals("") || password.equals("")){
+                return; //TODO vis gi beskjed til bruker at alle feltene må være fylt inn
             }
 
             controller.addPassword(newDomain, userInfo, password);
