@@ -1,6 +1,11 @@
 public class Main {
     public static void main(String[] args){
-        System.setProperty( "apple.awt.application.appearance", "system" );
-        Controller con = new Controller();
+        String[] osInfo = System.getProperty("os.name").split(" ");
+        
+        if (osInfo[0].equals("Mac")){
+            System.setProperty( "apple.awt.application.appearance", "system" );
+        }
+        
+        Controller controller = new Controller();
     }
 }
