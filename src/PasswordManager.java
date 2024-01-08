@@ -24,6 +24,7 @@ public class PasswordManager {
     private String passwordsFile, userFile, algorithm,selectedUser;
     private HashMap<String,String[]> allPasswordsMap,allUsersMap;
 
+    
     PasswordManager() {
         AESutil = new AESEncryptDecrypt();
         algorithm = "AES/CBC/PKCS5Padding";
@@ -33,15 +34,13 @@ public class PasswordManager {
         allUsersMap = new HashMap<String, String[]>(); //username,[userId,hashedKey,salt]
     }
 
-
     //Tar inn et brukernavn og passord, sjekker om brukeren finnes allerede, hvis bruker finnes sammenlinges passordet som er gitt(hashet), 
     //med det hashede passordet som ligger i userFile
-    Boolean checkCorrectPass(String username,String password) {
+    public Boolean checkCorrectPass(String username,String password) {
         try{
             if (!allUsersMap.containsKey(username)){return false;}
 
             String[] userData = allUsersMap.get(username); 
-
             String checkPassHash = AESutil.stringHashing(password);
 
             String correctPassHash = userData[0];
@@ -55,17 +54,12 @@ public class PasswordManager {
             }
             
         } catch(NoSuchAlgorithmException | InvalidKeySpecException e){
-            e.printStackTrace();
+            e.printStackTrace(); //TODO Forbedre try/catch
         } return false;
     }
 
-
-    void getDetails(){
-        //TODO
-    }
-
-
-    void addUser(String username, String password){
+    
+    public void addUser(String username, String password){
         byte[] salt = AESutil.generateRandByte();
 
         String saltString = Base64.getEncoder().encodeToString(salt);
@@ -78,12 +72,12 @@ public class PasswordManager {
             output.close();
 
         } catch (NoSuchAlgorithmException | IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //TODO Forbedre try/catch
         }
     }
 
 
-    void addPassword(String domain, String userInfo, String newPassword) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException{
+    public void addPassword(String domain, String userInfo, String newPassword) throws IOException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException{
         Writer output = new BufferedWriter(new FileWriter(passwordsFile, true));
         byte[] iv = AESutil.generateRandByte();
 
@@ -94,7 +88,7 @@ public class PasswordManager {
     } 
     
 
-    String decryptPassword(String[] data) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException{
+    public String decryptPassword(String[] data) throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException{
             byte[] iv = Base64.getDecoder().decode(data[3]);
             String plainText = AESutil.decryptPassword(algorithm, data[2], key, new IvParameterSpec(iv));
 
@@ -119,7 +113,7 @@ public class PasswordManager {
         }
     }
 
-    void readallUsersMapFromFile(){
+    public void readAllUsersFromFile(){
         allUsersMap.clear();
 
         try{
@@ -137,12 +131,12 @@ public class PasswordManager {
         }
     }
 
-    HashMap<String, String[]> getAllPasswordsEcrypted(){
+
+    public HashMap<String, String[]> getAllPasswordsEcrypted(){
         return allPasswordsMap;
     }
 
-    String getSelectedUser(){
+    public String getSelectedUser(){
         return selectedUser;
     }
-
 }

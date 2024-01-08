@@ -27,9 +27,12 @@ public class Controller {
         return logInStatus;
     }
 
+
     void addUser(String username, String password){
         passwordManager.addUser(username, password);
+        updateUserMap();
     }
+
 
     public void addPassword(String domain, String userInfo, String password){
         try {
@@ -38,13 +41,13 @@ public class Controller {
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
                 | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException
                 | IOException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Failed adding password");
             e.printStackTrace();
         }
     }
 
-    public String decryptPassword(String[] passwordData){
 
+    public String decryptPassword(String[] passwordData){
         String decryptedPassword = "";
 
         try {
@@ -52,26 +55,29 @@ public class Controller {
 
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException
                 | InvalidAlgorithmParameterException | NoSuchAlgorithmException | NoSuchPaddingException e) {
-            // TODO Auto-generated catch block
+            System.out.println("Failed decrypting password");
             e.printStackTrace();
         }
-
         return decryptedPassword;
     }
+
 
     public HashMap<String, String[]> getAllEncryptedPasswords(){
         return passwordManager.getAllPasswordsEcrypted();
     }
+    
+
+    public String getSelectedUser(){
+        return passwordManager.getSelectedUser();
+    }
+
 
     public void updatePasswordMap(){
         passwordManager.readAllPasswordsFromFile();
     }
 
+
     public void updateUserMap(){
         passwordManager.readAllUsersFromFile();
-    }
-
-    public String getSelectedUser(){
-        return passwordManager.getSelectedUser();
     }
 }

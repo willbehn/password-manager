@@ -19,6 +19,7 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 class AESEncryptDecrypt{
+
     public static byte[] generateRandByte(){
         byte[] randByte = new byte[16];
 
@@ -36,6 +37,7 @@ class AESEncryptDecrypt{
         return secretKey;
     }
 
+    
     public static String encryptPassword(String algorithm, String input, SecretKey key, IvParameterSpec iv) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException{
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, key, iv);
@@ -43,8 +45,8 @@ class AESEncryptDecrypt{
         byte[] cipherText = cipher.doFinal(input.getBytes());
 
         return Base64.getEncoder().encodeToString((cipherText));
-
     } 
+
 
     public static String decryptPassword(String algorithm, String cipherText, SecretKey key, IvParameterSpec iv) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException{
         Cipher cipher = Cipher.getInstance(algorithm);
@@ -53,8 +55,8 @@ class AESEncryptDecrypt{
         byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
 
         return new String(plainText);
-
     } 
+
 
     String stringHashing(String text) throws NoSuchAlgorithmException{
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
