@@ -7,30 +7,34 @@ This is a Java-based password manager for storing and managing your passwords. I
 
 - **AES Symmetric Encryption:** All passwords are encrypted using the Advanced Encryption Standard (AES) in CBC mode, enhancing the security of your stored passwords.
 
-- **Master Password Protection** Access to stored passwords is protected by a master password, providing an additional layer of security.
+- **Password Management** Enables easy search functionality among stored passwords, and the ability to delete and change existing passwords.
 
 - **Multi-User Support:** Supports multiple users, allowing each user to manage their set of passwords securely.
 
+
 ## Gallery:
 
-Log in window <br />
-![Screenshot 2024-01-08 at 21 43 11](https://github.com/willbehn/password-manager/assets/71493303/20e6895c-834d-49bc-abbf-49f03d7b6aa0) <br />
+Login window. If either the password or username does not match any existing user, a message will be displayed to the user that either the password or username er incorrect.  <br />
+![Screenshot 2024-01-08 at 23 01 31](https://github.com/willbehn/password-manager/assets/71493303/d691584e-fdd4-411e-b54f-21d90a14a632) <br />
 
-Adding new user <br />
-![Screenshot 2024-01-08 at 21 45 39](https://github.com/willbehn/password-manager/assets/71493303/e3720376-043c-4e07-b08d-64b5f6a9e298) <br />
+Option to add new users to the password manager. <br />
+![Screenshot 2024-01-08 at 23 01 47](https://github.com/willbehn/password-manager/assets/71493303/6a24c5c1-e617-45f8-bf85-91c7947ebb9f) <br />
 
-Overview of the password manager when four passwords are connected to the user <br />
-![Screenshot 2024-01-08 at 21 49 23](https://github.com/willbehn/password-manager/assets/71493303/0eedc7e4-b45b-44ab-b970-704f12413fb9) <br />
+Overview of the password manager, "copy password" copies the password to the clipboard for easy use. "Details" lets the user edit and remove passwords, and shows the password in plain-text. <br />
+![Screenshot 2024-01-08 at 23 00 22](https://github.com/willbehn/password-manager/assets/71493303/a4209206-3652-4fa3-b1e5-629fd38d0d50) <br />
 
-Searching for specific passwords <br />
-![Screenshot 2024-01-08 at 21 50 21](https://github.com/willbehn/password-manager/assets/71493303/9ee23b6a-cddc-4b98-b7a1-a78880605535) <br />
+The searchbar allows the user to easily find passwords among different services. <br />
+![Screenshot 2024-01-08 at 23 00 41](https://github.com/willbehn/password-manager/assets/71493303/bd493451-10f7-4ff5-9a32-f58d148be71e) <br />
 
-Adding new password <br />
-![Screenshot 2024-01-08 at 21 51 18](https://github.com/willbehn/password-manager/assets/71493303/a96137c5-c0d1-459d-90a2-f0c9588a4bb4) <br />
+Option to add new passwords. The password will not be added if all the fields are not filled, if this is the case a message will be displayed to the user. <br />
+![Screenshot 2024-01-08 at 23 01 02](https://github.com/willbehn/password-manager/assets/71493303/039078b0-b002-475e-a367-5f5db9514f2f) <br />
 
-Example of how the data is stored in the .txt file, the password is stored encrypted <br />
+Example of how the data is stored in the .txt file, the password is stored encrypted. <br />
 ![Screenshot 2024-01-08 at 21 55 32](https://github.com/willbehn/password-manager/assets/71493303/10ab0dd0-5f4d-4e5c-9611-0a59b2823faf) <br />
 
 
 ## How to use:
-Coming
+
+
+
+## Dependencies: 
