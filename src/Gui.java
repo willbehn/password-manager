@@ -3,9 +3,13 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Enumeration;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.formdev.flatlaf.themes.*;
@@ -34,8 +38,8 @@ public class Gui {
         //     System.exit(1);
         // }
 
-        windowWidth = 420;
-        windowHeight = 220;
+        windowWidth = 450;
+        windowHeight = 250;
 
         this.controller = controller;
         setFont (new java.awt.Font("MONOSPACE", java.awt.Font.PLAIN, 14));
@@ -79,9 +83,9 @@ public class Gui {
     }
 
     private void setLabelSize(JLabel field){
-        field.setMinimumSize(new Dimension(150, 50));
-        field.setPreferredSize(new Dimension(150, 50));
-        field.setMaximumSize(new Dimension(150, 50));
+        field.setMinimumSize(new Dimension(180, 50));
+        field.setPreferredSize(new Dimension(180, 50));
+        field.setMaximumSize(new Dimension(180, 50));
     }
     
 
@@ -200,7 +204,7 @@ public class Gui {
         topToolBar.add(searchButton);
         topToolBar.add(newPasswordButton);
 
-        topToolBar.setBackground(new Color(0,102,204));
+        topToolBar.setBackground(new Color(0,128,255));
 
         return topToolBar;
     }
@@ -221,7 +225,7 @@ public class Gui {
 
                 JPanel passwordPanel = new JPanel();
 
-                JLabel passwordInfo = new JLabel("<html><font size='4' color=white>" + passwordData[0] + "</font> <br> <font size='5'color=#66B2FF>" + passwordData[1] + "</font></html>");
+                JLabel passwordInfo = new JLabel("<html><font size='3' color=white>" + passwordData[0] + "</font> <br> <font size='4'color=#66B2FF>" + passwordData[1] + "</font></html>");
                 setLabelSize(passwordInfo);
                
                 JButton copyPasswordButton = new JButton("Copy password");
@@ -265,18 +269,30 @@ public class Gui {
 
 
     public void startWindow(){
-        logInWindow = createFrame(250,180);
+        logInWindow = createFrame(250,300);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("The all in one password manager");
+        // failedLogInLabel = new JLabel("Wrong username or password", SwingConstants.CENTER);
+        // failedLogInLabel.setForeground(Color.RED);
+        // failedLogInLabel.setVisible(false);
 
-        failedLogInLabel = new JLabel("Wrong username or password", SwingConstants.CENTER);
-        failedLogInLabel.setForeground(Color.RED);
-        failedLogInLabel.setVisible(false);
+        // mainPanel.add(failedLogInLabel, BorderLayout.PAGE_START);
 
-        mainPanel.add(failedLogInLabel, BorderLayout.PAGE_START);
+        BufferedImage lockIconBuff = null;
+
+        try {
+            lockIconBuff = ImageIO.read(new File("gallery/lockIconNew.png"));
+        } catch (IOException e) {
+            System.out.println("Picture not found");
+            e.printStackTrace();
+        }
+
+        Image lockIcon = lockIconBuff.getScaledInstance(210, 140,  java.awt.Image.SCALE_SMOOTH);
+        JLabel lockLabel = new JLabel(new ImageIcon(lockIcon));
+
+
 
         JPanel logInPanel = new JPanel();
 
@@ -304,9 +320,10 @@ public class Gui {
 
         registerPanel.add(newUserInstruction);
         registerPanel.add(registerUserButton);
-
+        
+        mainPanel.add(lockLabel, BorderLayout.PAGE_START);
         mainPanel.add(logInPanel, BorderLayout.CENTER);
-        mainPanel.add(registerPanel, BorderLayout.PAGE_END);
+        mainPanel.add(registerPanel, BorderLayout.SOUTH);
 
         logInWindow.add(mainPanel);
         logInWindow.setVisible(true);
@@ -376,11 +393,11 @@ public class Gui {
             
             if(controller.logIn(username,password)){
                 logInWindow.setVisible(false);
-                failedLogInLabel.setVisible(false);
+                //failedLogInLabel.setVisible(false);
                 passwordWindow();
 
             } else {
-                failedLogInLabel.setVisible(true);
+                //failedLogInLabel.setVisible(true);
             }
         }
     }
