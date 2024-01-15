@@ -34,8 +34,8 @@ public class Gui {
         //     System.exit(1);
         // }
 
-        windowWidth = 380;
-        windowHeight = 200;
+        windowWidth = 420;
+        windowHeight = 220;
 
         this.controller = controller;
         setFont (new java.awt.Font("MONOSPACE", java.awt.Font.PLAIN, 14));
@@ -79,9 +79,9 @@ public class Gui {
     }
 
     private void setLabelSize(JLabel field){
-        field.setMinimumSize(new Dimension(10, 3));
-        field.setPreferredSize(new Dimension(10, 3));
-        field.setMaximumSize(new Dimension(10, 3));
+        field.setMinimumSize(new Dimension(150, 50));
+        field.setPreferredSize(new Dimension(150, 50));
+        field.setMaximumSize(new Dimension(150, 50));
     }
     
 
@@ -190,15 +190,17 @@ public class Gui {
 
         JTextField searchField = new JTextField(15);
 
-        JButton searchButton = new JButton("Search");
+        JButton searchButton = new JButton("<html><font size='4' color=white>" + "Search" + "</font></html>");
         searchButton.addActionListener(new SearchButton(searchField));
         
-        JButton newPasswordButton = new JButton("Add new password");
+        JButton newPasswordButton = new JButton("<html><font size='4' color=white>" + "Add new password" + "</font></html>");
         newPasswordButton.addActionListener(new NewPasswordButton());
 
         topToolBar.add(searchField);
         topToolBar.add(searchButton);
         topToolBar.add(newPasswordButton);
+
+        topToolBar.setBackground(new Color(0,102,204));
 
         return topToolBar;
     }
@@ -212,8 +214,6 @@ public class Gui {
 
         HashMap<String, String[]> allPasswordsEncrypted = controller.getAllEncryptedPasswords();
 
-        Boolean colored = true;
-
         if (allPasswordsEncrypted.size() >= 1){
             for (String[] passwordData : allPasswordsEncrypted.values()){
 
@@ -221,7 +221,8 @@ public class Gui {
 
                 JPanel passwordPanel = new JPanel();
 
-                JLabel passwordInfo = new JLabel("<html><font size='3' color=white>" + passwordData[0] + "</font> <br> <font size='4'color=green>" + passwordData[1] + "</font></html>");
+                JLabel passwordInfo = new JLabel("<html><font size='4' color=white>" + passwordData[0] + "</font> <br> <font size='5'color=#66B2FF>" + passwordData[1] + "</font></html>");
+                setLabelSize(passwordInfo);
                
                 JButton copyPasswordButton = new JButton("Copy password");
                 copyPasswordButton.addActionListener(new copyToClipBoardButton(passwordData));
@@ -241,6 +242,7 @@ public class Gui {
                 }
             }
         }
+        setFont (new java.awt.Font("MONOSPACE", java.awt.Font.PLAIN, 14)); //TODO finn bedre sted til fontsetting
         return allPasswordsPanel;
     }
 
@@ -279,7 +281,7 @@ public class Gui {
         JPanel logInPanel = new JPanel();
 
         JButton logInButton = new JButton("login");
-        logInButton.setBackground(Color.green.darker());
+        logInButton.setBackground(new Color(0,128,255));
         logInButton.addActionListener(new LogInButton());
         
         usernameTextField = new JTextField(10);
