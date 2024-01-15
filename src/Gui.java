@@ -4,6 +4,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.Enumeration;
 
 import javax.swing.*;
 
@@ -37,6 +38,7 @@ public class Gui {
         windowHeight = 200;
 
         this.controller = controller;
+        setFont (new java.awt.Font("MONOSPACE", java.awt.Font.PLAIN, 14));
         startWindow();
     }
 
@@ -52,6 +54,7 @@ public class Gui {
         timer.start();
     }
 
+
     JFrame createFrame(int widt, int height){
         JFrame newFrame = new JFrame("Password manager");
 
@@ -60,6 +63,25 @@ public class Gui {
         newFrame.setSize(widt,height);
 
         return newFrame;
+    }
+
+    //setFont går igjennom alle UI komponentene sine font konstaneter og endrer tilmny font
+    private static void setFont (Font newFont){
+        Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+
+            Object key = keys.nextElement();
+            Object value = UIManager.get (key);
+
+            if (value != null && value instanceof Font)
+                UIManager.put (key, newFont);
+        }
+    }
+
+    private void setLabelSize(JLabel field){
+        field.setMinimumSize(new Dimension(10, 3));
+        field.setPreferredSize(new Dimension(10, 3));
+        field.setMaximumSize(new Dimension(10, 3));
     }
     
 
@@ -70,21 +92,19 @@ public class Gui {
         mainPanel.setLayout(new BorderLayout());
         
         JLabel newDomainLabel = new JLabel("Service", SwingConstants.CENTER);
-        JTextField newDomainField = new JTextField(10);
-
-        JLabel userInfoLabel = new JLabel("User-info", SwingConstants.CENTER);
-        JTextField userInfoField = new JTextField(10);
-
+        JLabel userInfoLabel = new JLabel("Userinfo", SwingConstants.CENTER);
         JLabel newPasswordLabel = new JLabel("Password", SwingConstants.CENTER);
+
+
+        JTextField newDomainField = new JTextField(10);
+        JTextField userInfoField = new JTextField(10);
         JTextField newPasswordField = new JPasswordField(10);
-
     
-
         JButton addPasswordButton = new JButton("Add password");
         addPasswordButton.addActionListener(new AddPasswordButton(newDomainField, userInfoField, newPasswordField));
 
         JPanel underPanel = new JPanel();
-        underPanel.setLayout(new GridLayout(3,3));
+        //underPanel.setLayout(new GridLayout(3,3));
 
         underPanel.add(newDomainLabel);
         underPanel.add(newDomainField);
@@ -100,6 +120,7 @@ public class Gui {
 
         newPasswordWindow.setVisible(true);
     }
+    
 
     public void newUserWindow(){
         newUserWindow = createFrame(250, 180);
@@ -297,7 +318,7 @@ public class Gui {
 
         JPanel mainPanel = new JPanel();
         
-        JLabel domainLabel = new JLabel("Domain: " + passwordData[0]);
+        JLabel domainLabel = new JLabel("Service: " + passwordData[0]);
         JLabel usernameLabel = new JLabel("Username: " + passwordData[1]);
         JLabel passwordLabel = new JLabel("Password: " + controller.decryptPassword(passwordData));
 
@@ -449,3 +470,4 @@ public class Gui {
         }
     }
 }
+
