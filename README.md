@@ -17,20 +17,19 @@ This is a Java-based password manager for storing and managing your passwords. I
 ## Gallery:
 
 Login window. If either the password or username does not match any existing user, a message will be displayed to the user that either the password or username er incorrect.  <br />
-![Screenshot 2024-01-15 at 22 59 17](https://github.com/willbehn/password-manager/assets/71493303/b26e60ec-255e-4f6f-9cca-395a7d3f2a75) <br />
+![Screenshot 2024-01-25 at 12 08 59](https://github.com/willbehn/password-manager/assets/71493303/39c94f41-4f75-406b-b0f9-9108ee86fab9) <br />
 
 Option to add new users to the password manager. <br />
-![Screenshot 2024-01-15 at 22 59 38](https://github.com/willbehn/password-manager/assets/71493303/233162e5-26d9-4f55-a752-3a16b2172c3d) <br />
+![Screenshot 2024-01-25 at 12 09 15](https://github.com/willbehn/password-manager/assets/71493303/5b65e4cc-149a-4d9f-bceb-0fd37778f74c) <br />
 
 Overview of the password manager, "copy password" copies the password to the clipboard for easy use. "Details" lets the user edit and remove passwords, and shows the password in plain-text. <br />
-![Screenshot 2024-01-15 at 23 01 09](https://github.com/willbehn/password-manager/assets/71493303/b347e49a-99be-41cf-b1de-7fc9f2782c39)
-<br />
+![Screenshot 2024-01-25 at 12 10 09](https://github.com/willbehn/password-manager/assets/71493303/efd4fc03-84ce-429d-acb8-fa5b43384658) <br />
 
 The searchbar allows the user to easily find passwords among different services. <br />
-![Screenshot 2024-01-15 at 23 01 24](https://github.com/willbehn/password-manager/assets/71493303/94b908b4-8295-4c51-8c9c-d91b82bd0ef1) <br />
+![Screenshot 2024-01-25 at 12 10 27](https://github.com/willbehn/password-manager/assets/71493303/1c5260c4-0ca7-40aa-987f-09ca89c6ab4e) <br />
 
-Detail-window example. <br />
-![Screenshot 2024-01-15 at 23 01 33](https://github.com/willbehn/password-manager/assets/71493303/25f63489-ad25-4272-bd47-2b694bef5eb8) <br />
+An example of what the details window looks like. The detail window gives you the option to change the password, or remove it from the password manager. <br />
+![Screenshot 2024-01-25 at 12 11 14](https://github.com/willbehn/password-manager/assets/71493303/34faa710-aa8f-4bff-8a2f-423d31a3fa93) <br />
 
 Example of how the data is stored in the .txt file, all passwords is stored encrypted using AES encryption in CBC mode, and the master password is stored hashed using SHA-256 . <br />
 ![Screenshot 2024-01-15 at 23 03 11](https://github.com/willbehn/password-manager/assets/71493303/126f4270-6bcc-4643-804a-fdc3791cc8f3) <br />
