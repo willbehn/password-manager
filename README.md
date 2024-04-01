@@ -1,7 +1,8 @@
 # password-manager
 
 ## About: 
-This is a Java-based password manager for storing and managing your passwords. It uses encryption to keep your information safe and offers features like multiple user support and password search functionality for ease of use. **Disclaimer:** This password manager is primarily created for educational and learning purposes. 
+This is a Java-based password manager for storing and managing your passwords. It uses encryption to keep your information safe and offers features like multiple user support and password search functionality for ease of use. <br />
+**Technologies and principle used:** ***Java***, ***AES-encryption***, ***OOP principles***, ***MVC architecture***
 
 ## Features:
 
