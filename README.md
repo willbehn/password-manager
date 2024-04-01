@@ -37,10 +37,3 @@ Example of how the data is stored in the .txt file, all passwords is stored encr
 ![Screenshot 2024-01-15 at 23 03 11](https://github.com/willbehn/password-manager/assets/71493303/126f4270-6bcc-4643-804a-fdc3791cc8f3) <br />
 
 ![Screenshot 2024-01-15 at 23 03 30](https://github.com/willbehn/password-manager/assets/71493303/b6e77d45-abc7-4d65-a75a-dc52af8bf380) <br />
-
-
-## How to use:
-
-
-
-## Dependencies: 
